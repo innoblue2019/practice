@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Database1Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Division">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Exam">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="ExamName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Grade" Type="Int32" />
+    <Property Name="StudentID" Type="Int32" />
+    <NavigationProperty Name="Student" Relationship="Self.FK_Exam_ToTable" FromRole="Exam" ToRole="Student" />
+  </EntityType>
+  <EntityType Name="Member">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Student">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="StudentName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Exam" Relationship="Self.FK_Exam_ToTable" FromRole="Student" ToRole="Exam" />
+  </EntityType>
+  <Association Name="FK_Exam_ToTable">
+    <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
+    <End Role="Exam" Type="Self.Exam" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Student">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Exam">
+        <PropertyRef Name="StudentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Database1Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Division" EntityType="Self.Division" />
+    <EntitySet Name="Exam" EntityType="Self.Exam" />
+    <EntitySet Name="Member" EntityType="Self.Member" />
+    <EntitySet Name="Student" EntityType="Self.Student" />
+    <AssociationSet Name="FK_Exam_ToTable" Association="Self.FK_Exam_ToTable">
+      <End Role="Student" EntitySet="Student" />
+      <End Role="Exam" EntitySet="Exam" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
